@@ -15,5 +15,23 @@ public interface IDataSaver
     /// </summary>
     public void SaveData();
 
-    public UserRecord GetRecord();
+    /// <summary>
+    /// Get the record associated with alias string out of records of the given chat.
+    /// </summary>
+    public UserRecord GetUserRecord(long chatId, string alias);
+
+    /// <summary>
+    /// Get all the records of the chat.
+    /// </summary>
+    public UserRecord[] GetUserRecords(long chatId);
+
+    /// <summary>
+    /// Add a new record to records of the chat.
+    /// </summary>
+    public void AddUserRecord(long chatId, UserRecord record);
+
+    /// <summary>
+    /// Remove the record with the given alias from the records of the given chat.
+    /// </summary>
+    public void RemoveUserRecord(long chatId, string alias);
 }
