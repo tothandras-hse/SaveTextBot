@@ -10,5 +10,6 @@ public static class BotCommandsList
     public static Dictionary<string, ISaveTextBotCommand> Commands = new ()
     {
         { "/help",  new HelpCommand() },
+        { "/info", new InfoCommand() }
     };
 }
