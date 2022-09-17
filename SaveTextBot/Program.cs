@@ -1,35 +1,25 @@
-﻿using System;
-
+﻿using SaveTextBot;
 using Telegram.Bot;
-using Telegram.Bot.Args;
-using Telegram.Bot.Types.ReplyMarkups;
+using Telegram.Bot.Polling;
+using Telegram.Bot.Types.Enums;
 
-using SaveTextBot.SaveDataService;
 
-namespace SaveTextBot
-{
-    static class Program
-    {
-        private static ITelegramBotClient botClient;
-        
-        static void Main(string[] args)
-        {
-            botClient = new TelegramBotClient($"{Token.TokenString}");
+var botClient = new TelegramBotClient($"{Token.TokenString}");
+var botBehaviour = new SaveTextBot.SaveTextBot();
 
-            try
-            {
-                var me =  botClient.GetMeAsync().Result;
-                Console.WriteLine($"Hello, World! I am user {me.Id} and my name is {me.FirstName}.");
-                
-                
-                
-                Thread.Sleep(int.MaxValue);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            
-        }
-    }
-}
+using var cts = new CancellationTokenSource();
+
+botClient.StartReceiving(
+    updateHandler: botBehaviour.OnMessage,
+    pollingErrorHandler: botBehaviour.OnException,
+    receiverOptions: botBehaviour.ReceiverOptions,
+    cancellationToken: cts.Token
+);
+
+var me = await botClient.GetMeAsync();
+
+Console.WriteLine($"Start listening for @{me.Username}");
+Console.ReadLine();
+
+// Send cancellation request to stop bot
+cts.Cancel();
