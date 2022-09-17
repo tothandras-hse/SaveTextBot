@@ -7,6 +7,8 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 
+using SaveTextBotCommands;
+
 /// <summary>
 /// Represent the behaviour of the bot.
 /// </summary>
@@ -44,9 +46,15 @@ public class SaveTextBot
     {
         if (update.Message is not {Text: { } messageText} message)
             return;
-
-
-        await SendMessage(botClient, cancellationToken, message.Chat.Id, "Привет =)");
+        
+        // Checking if the message from the user is a command
+        if (BotCommandsList.Commands.ContainsKey(message.Text.Split()[0]))
+        {
+            await SendMessage(botClient,
+                cancellationToken,
+                message.Chat.Id,
+                BotCommandsList.Commands[message.Text.Split()[0]].ManageCommand(message.Text));   
+        }
     }
 
     /// <summary>
