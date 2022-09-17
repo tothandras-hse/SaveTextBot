@@ -21,19 +21,22 @@ public class SaveTextBot
             AllowedUpdates = Array.Empty<UpdateType>()
         };
     }
-    
-    
+
+
     /// <summary>
     /// Forces the bot to reply by a message.
     /// </summary>
-    private async Task SendMessage(ITelegramBotClient botClient, CancellationToken cancellationToken, long chatId, string message)
+    private async Task SendMessage(ITelegramBotClient botClient,
+                                    CancellationToken cancellationToken,
+                                    long chatId,
+                                    string message)
     {
         await botClient.SendTextMessageAsync(
             chatId: chatId,
             text: message,
             cancellationToken: cancellationToken);
     }
-    
+
     /// <summary>
     /// Represent the behaviour of the bot when receiving a message.
     /// </summary>
@@ -41,24 +44,24 @@ public class SaveTextBot
     {
         if (update.Message is not {Text: { } messageText} message)
             return;
-        
 
-        await SendMessage(botClient, cancellationToken, message.Chat.Id, "I like that!");
+
+        await SendMessage(botClient, cancellationToken, message.Chat.Id, "Привет =)");
     }
-    
+
     /// <summary>
     /// Represent the behaviour of the bot when handing an exception.
     /// </summary>
     public Task OnException(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
-        var ErrorMessage = exception switch
+        var errorMessage = exception switch
         {
             ApiRequestException apiRequestException
                 => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
             _ => exception.ToString()
         };
 
-        Console.WriteLine(ErrorMessage);
+        Console.WriteLine(errorMessage);
         return Task.CompletedTask;
     }
 }

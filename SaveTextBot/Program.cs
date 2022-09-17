@@ -1,7 +1,5 @@
 ﻿using SaveTextBot;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
-using Telegram.Bot.Types.Enums;
 
 
 var botClient = new TelegramBotClient($"{Token.TokenString}");
